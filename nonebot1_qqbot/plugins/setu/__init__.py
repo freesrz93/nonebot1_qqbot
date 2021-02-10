@@ -1,18 +1,17 @@
 from nonebot import on_command, CommandSession
 from nonebot import on_natural_language, NLPSession, IntentCommand
 from nonebot.log import logger
-from .data_source import get_setu, get_setu_local
+from .data_source import get_setu2local, get_local_setu
 import asyncio
 
 
 @on_command('setu')
 async def setu(session: CommandSession):
     logger.info('执行setu命令')
-    image = get_setu_local()
+    image_msg = get_local_setu()
     await session.send(image)
-    logger.info(f'向QQ客户端发送了内容：{image}')
-    image = await get_setu()
-    logger.info(f'将 setu {name}保存到本地')
+    logger.info(f'向QQ客户端发送了内容：{image_msg}')
+    await get_setu2local()
 
 
 # on_natural_language 装饰器将函数声明为一个自然语言处理器

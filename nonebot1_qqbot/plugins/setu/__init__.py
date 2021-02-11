@@ -5,11 +5,11 @@ from .data_source import get_setu2local, get_local_setu
 import asyncio
 
 
-@on_command('setu')
+@on_command('setu', privileged=True)
 async def setu(session: CommandSession):
     logger.info('执行setu命令')
     image_msg = get_local_setu()
-    await session.send(image)
+    await session.send(image_msg)
     logger.info(f'向QQ客户端发送了内容：{image_msg}')
     await get_setu2local()
 

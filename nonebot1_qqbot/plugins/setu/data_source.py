@@ -1,9 +1,12 @@
+# noinspection PyUnresolvedReferences
+import asyncio
 import os
 import random
-import traceback
 import shutil
+import time
+import traceback
 from os import path
-import asyncio
+
 import aiofiles
 import httpx
 import ujson
@@ -49,6 +52,7 @@ async def get_setu2local(r18: int = 0,
     logger.info('向本地补充 setu 中...')
     params = {'apikey': SETU_API, 'r18': r18, 'num': num, 'proxy': proxy, 'size1200': size1200}
     try:
+        s = time.time()
         r = await request_api(params)
         setu = r['data'][0]
         pid = setu['pid']
@@ -56,9 +60,10 @@ async def get_setu2local(r18: int = 0,
         title = setu['title']
         name = path.basename(url)
         await save_image(url=url, name=name)
-        logger.info('保存 setu 成功')
+        e = time.time()
+        logger.info(f'补充 setu 成功, 用时{e - s:.3f}s')
     except:
-        logger.error('保存 setu 出错')
+        logger.error('补充 setu 出错')
         traceback.print_exc()
 
 

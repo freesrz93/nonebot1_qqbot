@@ -1,0 +1,13 @@
+from nonebot.default_config import *
+from datetime import timedelta
+
+SUPERUSERS = {1526334563}  # 超级用户
+PORT = 8500  # 反向 WebSocket 监听端口
+DEBUG = False
+SETU_API = ''  # https://api.lolicon.app/ 的api
+PROXY = ""  # 代理服务器地址
+RES_DIR = 'E:nonebot1_qqbot/nonebot1_qqbot/resources'  # 资源目录绝对路径
+NICKNAME = ['柴郡', '猫猫']
+SESSION_RUNNING_EXPRESSION =
+SESSION_RUN_TIMEOUT = timedelta(seconds=15)
+SESSION_EXPIRE_TIMEOUT = timedelta(seconds=15)

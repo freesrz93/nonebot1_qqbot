@@ -1,4 +1,12 @@
 # 机器人功能列表
+
+## 使用
+* 下载并配置 [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
+* git clone https://github.com/freesrz93/nonebot1_qqbot.git
+* 安装 requirements.txt
+* 配置 config.py.simple, 更名为 config.py
+
+
 ## 已实现功能
 * **setu功能 —— setu**
   >计划加入~~指定张数(一张就够了，别冲了)和关键词搜索功能~~(独立为p站搜图功能)  

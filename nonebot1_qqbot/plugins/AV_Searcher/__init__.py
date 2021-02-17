@@ -9,12 +9,15 @@ from nonebot.message import MessageSegment
 @on_command('av', aliases=['AV'], only_to_me=False)
 async def av_search(session: CommandSession):
     logger.info('执行 av_search 命令')
-    keyword = session.get('keyword')
+    try:
+        keyword = session.state['keyword']
+    except:
+        session.finish(MessageSegment.text('语句错误：缺少搜索关键词\n请重新调用功能'))
+        return
     urls, titles = await search_by_keyword(keyword)
     if session.is_first_run:
         titles_msg = MessageSegment.text(list2str(titles[0:4]))  # 避免结果过多刷屏，只输出前5条
         await session.send(titles_msg)
-
     video_num = session.get('num', prompt='请选择合适的结果序号')
     try:
         true_url = urls[int(video_num)-1]
@@ -24,7 +27,7 @@ async def av_search(session: CommandSession):
         await session.send(MessageSegment.text('输入的序号非法，只好返回第一个结果啦，呐呐呐'))
     magnets = await get_magnets(true_url)  # magnets: List[Tuple(str, str)]
     magnets_ = [' '.join(x) for x in magnets]
-    magnets_msg = MessageSegment.text('\n'.join(magnets_[0:9]))  # 避免磁链太多刷屏
+    magnets_msg = MessageSegment.text('\n'.join(magnets_[0:4]))  # 避免磁链太多刷屏
     await session.send(magnets_msg)
 
 

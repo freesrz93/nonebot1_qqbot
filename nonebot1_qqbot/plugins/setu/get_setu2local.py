@@ -1,6 +1,7 @@
 """
 此脚本原本负责执行 setu 命令的一部分功能，用于下载涩图到本地，由于其运行可能较缓慢（取决于网络环境），导致 setu 命令执行缓慢，造成会话阻塞
 因此现在 setu 命令已不引用此功能，临时解决方案，只能定时手动执行此脚本下载图片，setu 执行时则只从本地取图
+todo:此脚本需实现真正的异步并发获取
 """
 import logging
 import time
@@ -14,6 +15,8 @@ import ujson
 from config import SETU_API, PROXY, RES_DIR
 
 PLU_RES_DIR = RES_DIR + '/setu'
+logger = logging.getLogger('setu')
+logger.setLevel('INFO')
 
 
 async def get_setu2local(r18: int = 0,
@@ -41,9 +44,9 @@ async def get_setu2local(r18: int = 0,
         name = path.basename(url)
         await save_image(url=url, name=name)
         e = time.time()
-        logging.info(f'补充 setu 成功, 用时{e - s:.3f}s')
+        logger.info(f'补充 setu 成功, 用时{e - s:.3f}s')
     except:
-        logging.error('补充 setu 出错')
+        logger.error('补充 setu 出错')
         traceback.print_exc()
 
 
@@ -73,14 +76,14 @@ async def request_api(params) -> dict:
             r = await client.get('https://api.lolicon.app/setu/', params=params)
             r = ujson.loads(r.text)
     except httpx.ProxyError:
-        logging.error('请求 setu API (https://api.lolicon.app/setu/) 时 Proxy 出错，请检查代理设置 ')
+        logger.error('请求 setu API (https://api.lolicon.app/setu/) 时 Proxy 出错，请检查代理设置 ')
         return {}
     except httpx.RequestError:
-        logging.error('请求 setu API (https://api.lolicon.app/setu/) 时发生错误')
+        logger.error('请求 setu API (https://api.lolicon.app/setu/) 时发生错误')
         traceback.print_exc()
         return {}
     if r['code'] is not 0:
-        logging.warning(f'setu API 未返回图片链接，异常状态码 {r["code"]}：{r["msg"]}')
+        logger.warning(f'setu API 未返回图片链接，异常状态码 {r["code"]}：{r["msg"]}')
         return {}
     return r
 
@@ -98,20 +101,20 @@ async def save_image(url: str, name: str) -> None:
             r = await client.get(url)
             img = r.content
     except httpx.ProxyError:
-        logging.error(f'请求 setu ({url}) 时 Proxy 出错，请检查代理设置 ')
+        logger.error(f'请求 setu ({url}) 时 Proxy 出错，请检查代理设置 ')
         raise httpx.ProxyError
     except httpx.RequestError:
-        logging.error(f'请求 setu ({url}) 时发生错误')
+        logger.error(f'请求 setu ({url}) 时发生错误')
         traceback.print_exc()
         raise httpx.RequestError
     except httpx.HTTPStatusError:
-        logging.warning(f'setu ({url}) 返回了错误的状态码：{r.status_code}')
+        logger.warning(f'setu ({url}) 返回了错误的状态码：{r.status_code}')
         raise httpx.HTTPStatusError
     try:  # 写入到文件
         async with aiofiles.open(PLU_RES_DIR + f'/images/{name}', mode='wb') as f:
             await f.write(img)
     except:
-        logging.error(f'将 setu {name} 保存到本地时发生错误')
+        logger.error(f'将 setu {name} 保存到本地时发生错误')
         traceback.print_exc()
         raise IOError
 
@@ -120,4 +123,3 @@ if __name__ == '__main__':
     import asyncio
     for _ in range(10):
         res = asyncio.run(get_setu2local())
-        print(res)

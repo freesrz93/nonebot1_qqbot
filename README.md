@@ -51,7 +51,7 @@
 
 > 以下功能需寻找合适 API， 否则只能通过爬虫，可能效率较低
 
-* **B站动态 —— bilibili_story**
+* **B站动态 —— bilibili_dynamic**
 * **pixiv搜索或id给图 —— pixiv**
 * **steam 搜索指定游戏 —— steam_search**
 

@@ -85,7 +85,7 @@ async def get_magnets(ture_url: str) -> list:
 
 def list2str(lst: list) -> str:
     """
-    将 list 内的元素转化为字符串并按行输出，前面加上序号(从1开始)
+    将 list 内的元素转化为字符串，使得打印时能够按行输出并在前面加上序号(从1开始)
 
     e.g.
     In:

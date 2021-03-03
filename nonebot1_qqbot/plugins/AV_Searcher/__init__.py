@@ -17,6 +17,7 @@ async def av_search(session: CommandSession):
     urls, titles = await search_by_keyword(keyword)
     if session.is_first_run:
         titles_msg = MessageSegment.text(list2str(titles[0:4]))  # 避免结果过多刷屏，只输出前5条
+        logger.info('发送搜索结果')
         await session.send(titles_msg)
     video_num = session.get('num', prompt='请选择合适的结果序号')
     try:
@@ -28,6 +29,7 @@ async def av_search(session: CommandSession):
     magnets = await get_magnets(true_url)  # magnets: List[Tuple(str, str)]
     magnets_ = [' '.join(x) for x in magnets]
     magnets_msg = MessageSegment.text('\n'.join(magnets_[0:4]))  # 避免磁链太多刷屏
+    logger.info('发送磁链列表')
     await session.send(magnets_msg)
 
 

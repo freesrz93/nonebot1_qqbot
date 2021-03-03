@@ -15,7 +15,8 @@ from .get_setu2local import get_setu2local
 @on_command('setu', privileged=True)
 async def setu(session: CommandSession):
     logger.info('执行setu命令')
-    image_msg = get_local_setu()
+    image_msg, name = get_local_setu()
+    await session.send(name)
     await session.send(image_msg)
     logger.info(f'向QQ客户端发送了内容：{image_msg}')
     # await get_setu2local()
@@ -33,7 +34,7 @@ async def _(session: NLPSession):
 PLU_RES_DIR = RES_DIR + '/setu'
 
 
-def get_local_setu() -> Message_T:
+def get_local_setu() -> (Message_T, str):
     """
     从本地资源目录随机取一张涩图，将其移动到sent文件夹，返回该图生成的消息链对象
     """
@@ -43,8 +44,8 @@ def get_local_setu() -> Message_T:
         file = random.choice(files)  # os.DirEntry
         name = file.name
         shutil.move(file.path, PLU_RES_DIR + '/images/sent')
-        return MessageSegment.image('file:///' + PLU_RES_DIR + f'/images/sent/{name}')
+        return MessageSegment.image('file:///' + PLU_RES_DIR + f'/images/sent/{name}'), name
     except:
         logger.info('取得本地涩图失败，将发送随机默认图片')
         name = 'default/' + random.choice(os.listdir(PLU_RES_DIR + '/images/default'))
-        return MessageSegment.image('file:///' + PLU_RES_DIR + f'/images/default/{name}')
+        return MessageSegment.image('file:///' + PLU_RES_DIR + f'/images/default/{name}'), ''

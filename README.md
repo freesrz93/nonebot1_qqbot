@@ -35,7 +35,7 @@
 * **番号给磁力 —— AV_Searcher**
   > 此功能似乎容易被风控, 导致机器人无法在群里发送大段标题和磁链消息
 * **B站动态 —— bilibili_dynamic(测试中)**
-  > 感谢[QQBot_bilibili](https://github.com/wxz97121/QQBot_bilibili)
+  > 感谢[bilibili-api](https://github.com/Passkou/bilibili-api)
 * **胡言乱语 —— hyly**
   > 对各种乱七八糟的语句的回复  
   > 目前已实现：

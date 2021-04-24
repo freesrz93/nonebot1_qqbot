@@ -18,7 +18,7 @@ async def setu(session: CommandSession):
     image_msg, name = get_local_setu()
     await session.send(name)
     await session.send(image_msg)
-    logger.info(f'向QQ客户端发送了内容：{image_msg}')
+    logger.info(f'向QQ客户端发送[{image_msg}]')
     # await get_setu2local()
 
 

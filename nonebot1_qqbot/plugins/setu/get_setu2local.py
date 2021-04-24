@@ -83,7 +83,7 @@ async def request_api(params) -> dict:
         logger.error('请求 setu API (https://api.lolicon.app/setu/) 时发生错误')
         traceback.print_exc()
         return {}
-    if r['code'] is not 0:
+    if r['code'] != 0:
         logger.warning(f'setu API 未返回图片链接，异常状态码 {r["code"]}：{r["msg"]}')
         return {}
     return r

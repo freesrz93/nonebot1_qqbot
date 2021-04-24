@@ -34,7 +34,8 @@
   > 此处指路 [PixivUtil2](https://github.com/Nandaka/PixivUtil2) , 具体设置请自行研究
 * **番号给磁力 —— AV_Searcher**
   > 此功能似乎容易被风控, 导致机器人无法在群里发送大段标题和磁链消息
-
+* **B站动态 —— bilibili_dynamic(测试中)**
+  > 感谢[QQBot_bilibili](https://github.com/wxz97121/QQBot_bilibili)
 * **胡言乱语 —— hyly**
   > 对各种乱七八糟的语句的回复  
   > 目前已实现：
@@ -52,7 +53,6 @@
 
 > 以下功能需寻找合适 API, 否则只能通过爬虫, 可能效率较低
 
-* **B站动态 —— bilibili_dynamic**
 * **pixiv搜索或id给图 —— pixiv**
 * **steam 搜索指定游戏 —— steam_search**
 

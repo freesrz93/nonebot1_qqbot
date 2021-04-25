@@ -7,10 +7,7 @@ from nonebot.log import logger
 from bilibili_api import user, dynamic
 from nonebot.message import MessageSegment
 import time
-from config import DYNAMIC_INTERVAL
-
-group_list = [857743425]
-user_list = {205889201: '碧蓝海事局', 233114659: '碧蓝航线', 436344151: 'xnxnsrz'}
+from config import DYNAMIC_INTERVAL, USER_LIST, GROUP_LIST
 
 
 @nonebot.scheduler.scheduled_job('interval', seconds=DYNAMIC_INTERVAL)
@@ -20,10 +17,10 @@ async def _():
     for dynamic_id in history:
         if now_time - history[dynamic_id] > 3 * DYNAMIC_INTERVAL:
             history.pop(dynamic_id)
-    for user_uid in user_list:
-        logger.info(f'获取[{user_list[user_uid]}]的动态')
+    for user_uid in USER_LIST:
+        logger.info(f'获取[{USER_LIST[user_uid]}]的动态')
         dynamic_messages = get_latest_dynamic(user_uid, now_time)
-        for group_id in group_list:
+        for group_id in GROUP_LIST:
             for message in dynamic_messages:
                 logger.info(f'向群[{group_id}]发送动态信息')
                 await bot.send_group_msg(group_id=group_id, message=message)

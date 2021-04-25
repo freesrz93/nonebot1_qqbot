@@ -35,3 +35,4 @@ ujson==4.0.2
 Werkzeug==1.0.1
 wsproto==1.0.0
 requests==2.25.1
+bilibili_api==4.0.4

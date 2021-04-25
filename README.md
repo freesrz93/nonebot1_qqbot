@@ -40,6 +40,9 @@
   > 对各种乱七八糟的语句的回复  
   > 目前已实现：
   > * 二刺螈圣经
+* **热重载 —— reload**
+  > 感谢[DeltaBot](https://github.com/233a344a455/DeltaBot/blob/master/deltabot/plugins/reload.py)
+
 
 ## 待实现功能
 

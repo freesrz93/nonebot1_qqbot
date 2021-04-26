@@ -22,10 +22,11 @@ async def _():
         if str(now_time).endswith('1'):
             logger.info(f'获取[{USER_LIST[user_uid]}]的动态')
         dynamic_messages = get_latest_dynamics(user_uid, now_time)
-        for group_id in GROUP_LIST:
-            for message in dynamic_messages:
-                logger.info(f'向群[{group_id}]发送b站动态')
-                await bot.send_group_msg(group_id=group_id, message=message)
+        if dynamic_messages:
+            for group_id in GROUP_LIST:
+                for message in dynamic_messages:
+                    logger.info(f'向群[{group_id}]发送b站动态')
+                    await bot.send_group_msg(group_id=group_id, message=message)
 
 
 def get_latest_dynamics(uid: int, now_time: float):

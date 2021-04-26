@@ -20,7 +20,7 @@ async def _():
     for user_uid in USER_LIST:
         if str(now_time).endswith('1'):
             logger.info(f'获取[{USER_LIST[user_uid]}]的动态')
-        dynamic_messages = get_latest_dynamic(user_uid, now_time)
+        dynamic_messages = list(get_latest_dynamic(user_uid, now_time))
         for group_id in GROUP_LIST:
             for message in dynamic_messages:
                 logger.info(f'向群[{group_id}]发送动态信息')

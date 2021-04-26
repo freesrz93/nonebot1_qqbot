@@ -2,42 +2,44 @@
 
 
 import nonebot
-from .history import history
 from nonebot.log import logger
 from bilibili_api import user, dynamic
 from nonebot.message import MessageSegment
 import time
 from config import DYNAMIC_INTERVAL, USER_LIST, GROUP_LIST
 
+HISTORY = {}
+
 
 @nonebot.scheduler.scheduled_job('interval', seconds=DYNAMIC_INTERVAL)
 async def _():
     bot = nonebot.get_bot()
     now_time = time.time()
-    for dynamic_id in history:
-        if now_time - history[dynamic_id] > 3 * DYNAMIC_INTERVAL:
-            history.pop(dynamic_id)
+    for dynamic_id in HISTORY:
+        if now_time - HISTORY[dynamic_id] > 3 * DYNAMIC_INTERVAL:
+            HISTORY.pop(dynamic_id)
     for user_uid in USER_LIST:
         if str(now_time).endswith('1'):
             logger.info(f'获取[{USER_LIST[user_uid]}]的动态')
-        dynamic_messages = list(get_latest_dynamic(user_uid, now_time))
+        dynamic_messages = get_latest_dynamics(user_uid, now_time)
         for group_id in GROUP_LIST:
             for message in dynamic_messages:
-                logger.info(f'向群[{group_id}]发送动态信息')
+                logger.info(f'向群[{group_id}]发送b站动态')
                 await bot.send_group_msg(group_id=group_id, message=message)
 
 
-def get_latest_dynamic(uid: int, now_time: float):
+def get_latest_dynamics(uid: int, now_time: float):
     dynamic_list = user.get_dynamic_g(uid)
-    while True:
-        latest_dynamic = next(dynamic_list)
+    msg_list = []
+    for latest_dynamic in dynamic_list:
         timestamp = latest_dynamic['desc']['timestamp']
         dynamic_id = latest_dynamic['desc']['dynamic_id']
-        if now_time - timestamp <= 1.8 * DYNAMIC_INTERVAL and dynamic_id not in history:
-            history[dynamic_id] = timestamp
-            yield dynamic2message(latest_dynamic)
+        if now_time - timestamp <= 1.8 * DYNAMIC_INTERVAL and dynamic_id not in HISTORY:
+            HISTORY[dynamic_id] = timestamp
+            msg_list.append(dynamic2message(latest_dynamic))
             continue
         break
+    return msg_list
 
 
 def dynamic2message(dynamic_dict: dict):

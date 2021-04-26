@@ -15,7 +15,7 @@ HISTORY = {}
 async def _():
     bot = nonebot.get_bot()
     now_time = time.time()
-    for dynamic_id in HISTORY:
+    for dynamic_id in list(HISTORY):
         if now_time - HISTORY[dynamic_id] > 3 * DYNAMIC_INTERVAL:
             HISTORY.pop(dynamic_id)
     for user_uid in USER_LIST:

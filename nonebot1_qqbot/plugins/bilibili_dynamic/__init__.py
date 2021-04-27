@@ -11,7 +11,7 @@ from config import DYNAMIC_INTERVAL, USER_LIST, GROUP_LIST
 HISTORY = {}
 
 
-@nonebot.scheduler.scheduled_job('interval', seconds=DYNAMIC_INTERVAL)
+@nonebot.scheduler.scheduled_job('interval', seconds=DYNAMIC_INTERVAL, max_instances=10, misfire_grace_time=None)
 async def _():
     bot = nonebot.get_bot()
     now_time = time.time()

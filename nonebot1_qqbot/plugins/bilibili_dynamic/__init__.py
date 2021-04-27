@@ -1,10 +1,9 @@
 # -*-coding:utf8-*-
-
-
+import asyncio
 import nonebot
 from nonebot.log import logger
 from bilibili_api import user, dynamic
-from nonebot.message import MessageSegment
+from nonebot.message import MessageSegment, Message
 import time
 from config import DYNAMIC_INTERVAL, USER_LIST, GROUP_LIST
 
@@ -23,10 +22,12 @@ async def _():
             logger.info(f'获取[{USER_LIST[user_uid]}]的动态')
         dynamic_messages = get_latest_dynamics(user_uid, now_time)
         if dynamic_messages:
+            tasks = []
             for group_id in GROUP_LIST:
                 for message in dynamic_messages:
                     logger.info(f'向群[{group_id}]发送b站动态')
-                    await bot.send_group_msg(group_id=group_id, message=message)
+                    tasks.append(bot.send_group_msg(group_id=group_id, message=message))
+            await asyncio.gather(*tasks)
 
 
 def get_latest_dynamics(uid: int, now_time: float):
@@ -43,7 +44,7 @@ def get_latest_dynamics(uid: int, now_time: float):
     return msg_list
 
 
-def dynamic2message(dynamic_dict: dict):
+def dynamic2message(dynamic_dict: dict) -> Message:
     """
     将从api获取到的原始动态转换为消息
     """
@@ -53,26 +54,27 @@ def dynamic2message(dynamic_dict: dict):
         text = f"用户[{author_name}]转发了动态：\n" + dynamic_dict['card']['item']['content'] + "\n---------------------\n"
         origin_dynamic = dynamic.get_info(dynamic_dict['card']['item']['orig_dy_id'])
         ori_message = dynamic2message(origin_dynamic)
-        msg = MessageSegment.text(text) + ori_message
+        msg = MessageSegment.text(text) + ori_message + MessageSegment.text('\n---------------------')
 
     elif dynamic_dict['desc']['type'] == 2:  # 图文动态
         text = f"用户[{author_name}]发布了动态：\n" + dynamic_dict['card']['item']['description']
         msg = MessageSegment.text(text)
         for i in range(dynamic_dict['card']['item']['pictures_count']):
-            msg += MessageSegment.image(dynamic_dict['card']['item']['pictures'][i]['img_src'])
+            msg = msg + MessageSegment.image(dynamic_dict['card']['item']['pictures'][i]['img_src'])
 
     elif dynamic_dict['desc']['type'] == 4:  # 纯文字动态
         msg = MessageSegment.text(f"用户[{author_name}]发布了动态：\n" + dynamic_dict['card']['item']['content'])
 
     elif dynamic_dict['desc']['type'] == 8:  # 视频投稿
-        msg = MessageSegment.text(f"用户[{author_name}]发布了视频：\n" + dynamic_dict['card']['dynamic'] \
-                                  + "\n视频链接：" + dynamic_dict['card']['short_link'])
+        msg = MessageSegment.text(
+            f"用户[{author_name}]发布了视频：\n" + dynamic_dict['card']['dynamic'] + "\n视频标题：" + dynamic_dict['card'][
+                'title'] + "\n视频链接：" + dynamic_dict['card']['short_link'])
 
     elif dynamic_dict['desc']['type'] == 64:  # 发布专栏
         msg = MessageSegment.text(f"用户[{author_name}]发布了专栏：\n" + dynamic_dict['card']['title'])
     else:
         msg = MessageSegment.text('')
-    msg += MessageSegment.text(f'\n\n原动态链接：https://t.bilibili.com/{dynamic_id}')
+    msg = msg + MessageSegment.text(f'\n\n原动态链接：https://t.bilibili.com/{dynamic_id}')
     return msg
 
 

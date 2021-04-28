@@ -17,9 +17,8 @@ async def _():
     for dynamic_id in list(HISTORY):
         if now_time - HISTORY[dynamic_id] > 3 * DYNAMIC_INTERVAL:
             HISTORY.pop(dynamic_id)
+    logger.info(f'获取[{len(USER_LIST)}]个up的动态')
     for user_uid in USER_LIST:
-        if str(now_time).endswith('1'):
-            logger.info(f'获取[{USER_LIST[user_uid]}]的动态')
         dynamic_messages = get_latest_dynamics(user_uid, now_time)
         if dynamic_messages:
             tasks = []

@@ -73,7 +73,7 @@ def dynamic2message(dynamic_dict: dict) -> Message:
     elif dynamic_dict['desc']['type'] == 64:  # 发布专栏
         msg = MessageSegment.text(f"用户[{author_name}]发布了专栏：\n" + dynamic_dict['card']['title'])
     else:
-        msg = MessageSegment.text('')
+        msg = MessageSegment.text(f'用户[{author_name}]发布了动态，但无法判断类型')
     msg = msg + MessageSegment.text(f'\n\n原动态链接：https://t.bilibili.com/{dynamic_id}')
     return msg
 

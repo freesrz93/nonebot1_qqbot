@@ -47,5 +47,5 @@ def get_local_setu() -> (Message_T, str):
         return MessageSegment.image('file:///' + PLU_RES_DIR + f'/images/sent/{name}'), name
     except:
         logger.info('取得本地涩图失败，将发送随机默认图片')
-        name = 'default/' + random.choice(os.listdir(PLU_RES_DIR + '/images/default'))
+        name = random.choice(os.listdir(PLU_RES_DIR + '/images/default'))
         return MessageSegment.image('file:///' + PLU_RES_DIR + f'/images/default/{name}'), ''

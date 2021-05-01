@@ -1,4 +1,4 @@
-# nonebot1_qqbot 文档
+# nonebot1_qqbot
 
 [![License](https://img.shields.io/github/license/nonebot/nonebot.svg)](LICENSE)
 ![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)
@@ -34,14 +34,16 @@
   > 此处指路 [PixivUtil2](https://github.com/Nandaka/PixivUtil2) , 具体设置请自行研究
 * **番号给磁力 —— AV_Searcher**
   > 此功能似乎容易被风控, 导致机器人无法在群里发送大段标题和磁链消息
-* **B站动态 —— bilibili_dynamic(测试中)**
+* **B站动态 —— bilibili_dynamic**
   > 感谢[bilibili-api](https://github.com/Passkou/bilibili-api)
 * **胡言乱语 —— hyly**
   > 对各种乱七八糟的语句的回复  
   > 目前已实现：
   > * 二刺螈圣经
-* **热重载 —— reload**
-  > 感谢[DeltaBot](https://github.com/233a344a455/DeltaBot/blob/master/deltabot/plugins/reload.py)
+* **(已废弃)~~热重载 —— reload~~**
+  > 重载后原来的定时任务不会取消，导致多次执行，在未找到解决方案前暂废弃此方法
+* **机器人实时状态 —— status**
+  > 仅管理员可用。发送机器人运行时间，内存及CPU占用
 
 
 ## 待实现功能
@@ -50,16 +52,14 @@
   > 自我介绍、功能列表、命令帮助
 * **复读 —— repeat**
   > 当在15s(暂定)内出现连续两条相同消息时复读
-* **报时 —— clock**
-  > 整点报时, ~~多时区~~(copy 了一段别人的代码, 尚未研究修改)
 * **撤回消息提醒 —— chehui**
 
-> 以下功能需寻找合适 API, 否则只能通过爬虫, 可能效率较低
+### 以下功能需寻找合适 API, 否则只能通过爬虫, 可能效率较低
 
 * **pixiv搜索或id给图 —— pixiv**
 * **steam 搜索指定游戏 —— steam_search**
 
-> 以下内容少儿不宜
+### 以下内容少儿不宜
 
 * **女优信息（暂无合适数据源）**
 

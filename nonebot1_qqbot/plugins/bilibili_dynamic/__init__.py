@@ -16,6 +16,7 @@ async def _():
     now_time = time.time()
     for dynamic_id in list(HISTORY):
         if now_time - HISTORY[dynamic_id] > 3 * DYNAMIC_INTERVAL:
+            logger.info(f'从[HISTORY]删除[{dynamic_id}, {HISTORY[dynamic_id]}]')
             HISTORY.pop(dynamic_id)
     logger.info(f'获取[{len(USER_LIST)}]个up的动态')
     for user_uid in USER_LIST:
@@ -37,6 +38,7 @@ def get_latest_dynamics(uid: int, now_time: float):
         dynamic_id = latest_dynamic['desc']['dynamic_id']
         if now_time - timestamp <= 1.8 * DYNAMIC_INTERVAL and dynamic_id not in HISTORY:
             HISTORY[dynamic_id] = timestamp
+            logger.info(f'向[HISTORY]添加[{dynamic_id}, {HISTORY[dynamic_id]}]')
             msg_list.append(dynamic2message(latest_dynamic))
             continue
         break

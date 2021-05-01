@@ -21,11 +21,11 @@ def get_my_status():
     now_time = time.time()
     run_time = now_time - create_time
     m, s = divmod(run_time, 60)
-    h, m = divmod(m, 60)
+    h, m = divmod(int(m), 60)
     d, h = divmod(h, 24)
     # 内存 cpu 占用
     mem = p.memory_percent()
     cpu = p.cpu_percent()
-    res = f'[Bot Status]\n已运行：{d}天{h}时{m}分{s}秒\n内存：{mem:.2}%\nCPU：{cpu:.2}%'
+    res = f'[Bot Status]\n已运行：{d}天{h}时{m}分{s:.2f}秒\n内存：{mem:.2f}%\nCPU：{cpu:.2f}%'
     return res
 

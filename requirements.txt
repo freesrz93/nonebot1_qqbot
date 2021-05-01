@@ -45,3 +45,4 @@ websockets==8.1
 Werkzeug==1.0.1
 wsproto==1.0.0
 yarl==1.6.3
+psutil==5.8.0

@@ -17,10 +17,12 @@ def get_my_status():
     pid = os.getpid()
     p = psutil.Process(pid)
     # 运行时间
-    create_time = time.localtime(p.create_time())
-    time.sleep(5)
-    now_time = time.localtime(time.time())
-    _, _, d, h, m, s, _, _, _ = [y-x for x, y in zip(create_time, now_time)]
+    create_time = p.create_time()
+    now_time = time.time()
+    run_time = now_time - create_time
+    m, s = divmod(run_time, 60)
+    h, m = divmod(m, 60)
+    d, h = divmod(h, 24)
     # 内存 cpu 占用
     mem = p.memory_percent()
     cpu = p.cpu_percent()

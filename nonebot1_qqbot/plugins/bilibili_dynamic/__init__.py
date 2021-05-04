@@ -1,29 +1,32 @@
 # -*-coding:utf8-*-
 import asyncio
-import nonebot
-from nonebot.log import logger
-from bilibili_api import user, dynamic
-from nonebot.message import MessageSegment, Message
 import time
-from config import DYNAMIC_INTERVAL, USER_LIST, GROUP_LIST
+
+import nonebot
+from bilibili_api import user, dynamic
+from nonebot.log import logger
+from nonebot.message import MessageSegment, Message
+
+from config import BiliBili
 
 HISTORY = {}
 
 
-@nonebot.scheduler.scheduled_job('interval', seconds=DYNAMIC_INTERVAL, max_instances=10, misfire_grace_time=None)
+@nonebot.scheduler.scheduled_job('interval', seconds=BiliBili.INTERVAL, max_instances=10,
+                                 misfire_grace_time=None)
 async def _():
     bot = nonebot.get_bot()
     now_time = time.time()
     for dynamic_id in list(HISTORY):
-        if now_time - HISTORY[dynamic_id] > 3 * DYNAMIC_INTERVAL:
+        if now_time - HISTORY[dynamic_id] > 3 * BiliBili.INTERVAL:
             logger.info(f'从[HISTORY]删除[{dynamic_id}, {HISTORY[dynamic_id]}]')
             HISTORY.pop(dynamic_id)
-    logger.info(f'获取[{len(USER_LIST)}]个up的动态')
-    for user_uid in USER_LIST:
+    logger.info(f'获取[{len(BiliBili.USER_LIST)}]个up的动态')
+    for user_uid in BiliBili.USER_LIST:
         dynamic_messages = get_latest_dynamics(user_uid, now_time)
         if dynamic_messages:
             tasks = []
-            for group_id in GROUP_LIST:
+            for group_id in BiliBili.GROUP_LIST:
                 for message in dynamic_messages:
                     logger.info(f'向群[{group_id}]发送b站动态')
                     tasks.append(bot.send_group_msg(group_id=group_id, message=message))
@@ -36,7 +39,7 @@ def get_latest_dynamics(uid: int, now_time: float):
     for latest_dynamic in dynamic_list:
         timestamp = latest_dynamic['desc']['timestamp']
         dynamic_id = latest_dynamic['desc']['dynamic_id']
-        if now_time - timestamp <= 1.8 * DYNAMIC_INTERVAL and dynamic_id not in HISTORY:
+        if now_time - timestamp <= 1.8 * BiliBili.INTERVAL and dynamic_id not in HISTORY:
             HISTORY[dynamic_id] = timestamp
             logger.info(f'向[HISTORY]添加[{dynamic_id}, {HISTORY[dynamic_id]}]')
             msg_list.append(dynamic2message(latest_dynamic))

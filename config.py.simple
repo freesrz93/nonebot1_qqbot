@@ -2,20 +2,25 @@ from nonebot.default_config import *
 from datetime import timedelta
 
 # general
-SUPERUSERS = {1526334563}
+API_ROOT = ''
+SUPERUSERS = {}
 PORT = 8500
 DEBUG = False
 SESSION_RUNNING_EXPRESSION = ''
 SESSION_RUN_TIMEOUT = timedelta(seconds=15)
 SESSION_EXPIRE_TIMEOUT = timedelta(seconds=15)
 PROXY = "http://localhost:7890"
-RES_DIR = 'path of directory /resources'
-NICKNAME = ['柴郡', '猫猫']
+RES_DIR = ''
+NICKNAME = []
 
-# setu
-SETU_API = 'your API here'
 
-# bilibili
-DYNAMIC_INTERVAL = 30  # 动态获取时间间隔
-GROUP_LIST = [857743425]  # 发送动态的群
-USER_LIST = {436344151: 'xnxnsrz'}  # 订阅的用户
+class SETU:
+    INTERVAL = 60  # 每个人的调用间隔（秒）
+    BLACKLIST = []
+    WHITELIST = []
+
+
+class BiliBili:
+    INTERVAL = 300  # 动态获取时间间隔（秒）
+    GROUP_LIST = []  # 发送动态的群
+    USER_LIST = {15810: 'Mr.Quin'}  # 订阅的用户
